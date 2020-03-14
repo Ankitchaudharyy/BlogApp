@@ -1,11 +1,13 @@
 var express     = require('express'),
     bodyParser  = require('body-parser'),
+    override    = require('method-override'),
     mongoose    = require('mongoose'),
     app         = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true}));
+app.use(override("_method"));
 mongoose.connect("mongodb://localhost/BlogPost", {useNewUrlParser: true, useUnifiedTopology: true});
 
 // MONGOOSE/MODEL CONFIG
@@ -62,6 +64,28 @@ app.get("/blogs/:id", function(req, res){
             res.render("show", {blog: foundBlog});
         }
     })
+});
+
+//5. EDIT Route
+app.get("/blogs/:id/edit", function(req, res){
+    Blog.findById(req.params.id, function(err, Eblog){
+        if(err){
+            res.redirect("/blogs");
+        } else {
+            res.render("edit", {blog: Eblog});
+        }
+    });
+});
+
+// 6. PUT Route
+app.put("/blogs/:id", function(req, res){
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updateBlog){
+        if(err) {
+            res.redirect("/blogs/req.params.id/edit");
+        } else {
+            res.redirect("/blogs/" + req.params.id);
+        }
+    });
 });
 
 const PORT = process.env.PORT || 3000;
