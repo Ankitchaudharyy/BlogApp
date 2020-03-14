@@ -53,5 +53,16 @@ app.post("/blogs", function(req, res){
     });
 });
 
+// 4. SHOW Route
+app.get("/blogs/:id", function(req, res){
+    Blog.findById(req.params.id, function(err, foundBlog){
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("show", {blog: foundBlog});
+        }
+    })
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
