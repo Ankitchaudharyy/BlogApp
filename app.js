@@ -88,5 +88,16 @@ app.put("/blogs/:id", function(req, res){
     });
 });
 
+// 7. DESTROY Route
+app.delete("/blogs/:id", function(req, res){
+    Blog.findByIdAndDelete(req.params.id, function(err){
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs");
+        }   
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
