@@ -36,5 +36,22 @@ app.get("/blogs", function(req, res){
     });
 });
 
+// 2. NEW Route
+app.get("/blogs/new", function(req, res){
+    res.render("new");
+});
+
+// 3. CREATE Route
+app.post("/blogs", function(req, res){
+    Blog.create(req.body.blog, function(err, newBlog){
+        if(err){
+            res.render("new");
+        } else {
+            res.redirect("/blogs");
+        }
+
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
